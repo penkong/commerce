@@ -1,12 +1,21 @@
+import s from './CartItem.module.css'
+
 import { ChangeEvent, useEffect, useState } from 'react'
-import cn from 'classnames'
+
 import Image from 'next/image'
 import Link from 'next/link'
-import { Trash, Plus, Minus } from '@components/icons'
-import usePrice from '@framework/use-price'
+
+import cn from 'classnames'
+
+// -----------------
+
 import useUpdateItem from '@framework/cart/use-update-item'
 import useRemoveItem from '@framework/cart/use-remove-item'
-import s from './CartItem.module.css'
+import usePrice from '@framework/use-price'
+
+import { Trash, Plus, Minus } from '@components/icons'
+
+// -----------------
 
 const CartItem = ({
   item,
@@ -15,6 +24,13 @@ const CartItem = ({
   item: any
   currencyCode: string
 }) => {
+  // states -----------
+
+  const [quantity, setQuantity] = useState(item.quantity)
+  const [removing, setRemoving] = useState(false)
+
+  // graph hooks -----------
+
   const { price } = usePrice({
     amount: item.extended_sale_price,
     baseAmount: item.extended_list_price,
@@ -22,25 +38,18 @@ const CartItem = ({
   })
   const updateItem = useUpdateItem(item)
   const removeItem = useRemoveItem()
-  const [quantity, setQuantity] = useState(item.quantity)
-  const [removing, setRemoving] = useState(false)
-  const updateQuantity = async (val: number) => {
-    await updateItem({ quantity: val })
-  }
-  const handleQuantity = (e: ChangeEvent<HTMLInputElement>) => {
-    const val = Number(e.target.value)
 
-    if (Number.isInteger(val) && val >= 0) {
-      setQuantity(e.target.value)
-    }
-  }
-  const handleBlur = () => {
-    const val = Number(quantity)
+  // lifecycles -----------
 
-    if (val !== item.quantity) {
-      updateQuantity(val)
+  useEffect(() => {
+    // Reset the quantity state if the item quantity changes
+    if (item.quantity !== Number(quantity)) {
+      setQuantity(item.quantity)
     }
-  }
+  }, [item.quantity])
+
+  // functionalities -----------
+
   const increaseQuantity = (n = 1) => {
     const val = Number(quantity) + n
 
@@ -49,6 +58,22 @@ const CartItem = ({
       updateQuantity(val)
     }
   }
+
+  const updateQuantity = async (val: number) =>
+    await updateItem({ quantity: val })
+
+  const handleQuantity = (e: ChangeEvent<HTMLInputElement>) => {
+    const val = Number(e.target.value)
+
+    if (Number.isInteger(val) && val >= 0) setQuantity(e.target.value)
+  }
+
+  const handleBlur = () => {
+    const val = Number(quantity)
+
+    if (val !== item.quantity) updateQuantity(val)
+  }
+
   const handleRemove = async () => {
     setRemoving(true)
 
@@ -61,12 +86,7 @@ const CartItem = ({
     }
   }
 
-  useEffect(() => {
-    // Reset the quantity state if the item quantity changes
-    if (item.quantity !== Number(quantity)) {
-      setQuantity(item.quantity)
-    }
-  }, [item.quantity])
+  // renderer -----------
 
   return (
     <li

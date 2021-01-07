@@ -1,35 +1,57 @@
-import { FC } from 'react'
-import cn from 'classnames'
-import { UserNav } from '@components/common'
-import { Button } from '@components/ui'
-import { Bag, Cross, Check } from '@components/icons'
-import { useUI } from '@components/ui/context'
-import useCart from '@framework/cart/use-cart'
-import usePrice from '@framework/use-price'
-import CartItem from '../CartItem'
 import s from './CartSidebarView.module.css'
 
+import { FC } from 'react'
+import cn from 'classnames'
+
+// -----------------
+
+import useCart from '@framework/cart/use-cart'
+import usePrice from '@framework/use-price'
+
+import { Bag, Cross, Check } from '@components/icons'
+import CartItem from '@components/cart/CartItem'
+import { UserNav } from '@components/common'
+import { Button } from '@components/ui'
+import { useUI } from '@components/ui/context'
+
+// -----------------
+
 const CartSidebarView: FC = () => {
+  // context -----------
+
   const { closeSidebar } = useUI()
+
+  // utils -----------
+
+  const error = null
+
+  const success = null
+
+  // graph hooks -----------
+
   const { data, isEmpty } = useCart()
+
   const { price: subTotal } = usePrice(
     data && {
       amount: data.base_amount,
       currencyCode: data.currency.code,
     }
   )
+
   const { price: total } = usePrice(
     data && {
       amount: data.cart_amount,
       currencyCode: data.currency.code,
     }
   )
+
+  // functionalities -----------
+
   const handleClose = () => closeSidebar()
 
   const items = data?.line_items.physical_items ?? []
 
-  const error = null
-  const success = null
+  // renderer -----------
 
   return (
     <div

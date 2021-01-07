@@ -1,1 +1,2 @@
-export { default } from './WishlistCard'
+// export { default } from './WishlistCard'
+export * from './WishlistCard'

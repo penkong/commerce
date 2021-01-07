@@ -1,5 +1,8 @@
-import cn from 'classnames'
 import s from './FeatureBar.module.css'
+
+import cn from 'classnames'
+
+// -----------------
 
 interface FeatureBarProps {
   className?: string
@@ -9,6 +12,8 @@ interface FeatureBarProps {
   action?: React.ReactNode
 }
 
+// -----------------
+
 const FeatureBar: React.FC<FeatureBarProps> = ({
   title,
   description,
@@ -16,6 +21,8 @@ const FeatureBar: React.FC<FeatureBarProps> = ({
   action,
   hide,
 }) => {
+  // Ui thing -----------
+
   const rootClassName = cn(
     s.root,
     {
@@ -25,6 +32,9 @@ const FeatureBar: React.FC<FeatureBarProps> = ({
     },
     className
   )
+
+  // renderer -----------
+
   return (
     <div className={rootClassName}>
       <span className="block md:inline">{title}</span>
