@@ -1,13 +1,28 @@
-import { useKeenSlider } from 'keen-slider/react'
-import React, { Children, FC, isValidElement, useState, useRef, useEffect } from 'react'
-import cn from 'classnames'
-
 import s from './ProductSlider.module.css'
 
+import React, {
+  Children,
+  FC,
+  isValidElement,
+  useState,
+  useRef,
+  useEffect,
+} from 'react'
+import { useKeenSlider } from 'keen-slider/react'
+
+import cn from 'classnames'
+
+// -----------------
+
 const ProductSlider: FC = ({ children }) => {
+  // state -----------
+
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isMounted, setIsMounted] = useState(false)
+  // ref object
   const sliderContainerRef = useRef<HTMLDivElement>(null)
+
+  // utils -----------
 
   const [ref, slider] = useKeenSlider<HTMLDivElement>({
     loop: true,
@@ -18,6 +33,8 @@ const ProductSlider: FC = ({ children }) => {
     },
   })
 
+  // lifecycle -----------
+
   // Stop the history navigation gesture on touch devices
   useEffect(() => {
     const preventNavigation = (event: TouchEvent) => {
@@ -25,7 +42,7 @@ const ProductSlider: FC = ({ children }) => {
       const touchXPosition = event.touches[0].pageX
       // Size of the touch area
       const touchXRadius = event.touches[0].radiusX || 0
-      
+
       // We set a threshold (10px) on both sizes of the screen,
       // if the touch area overlaps with the screen edges
       // it's likely to trigger the navigation. We prevent the
@@ -33,17 +50,24 @@ const ProductSlider: FC = ({ children }) => {
       if (
         touchXPosition - touchXRadius < 10 ||
         touchXPosition + touchXRadius > window.innerWidth - 10
-      ) event.preventDefault()
+      )
+        event.preventDefault()
     }
 
-    sliderContainerRef.current!
-      .addEventListener('touchstart', preventNavigation)
+    sliderContainerRef.current!.addEventListener(
+      'touchstart',
+      preventNavigation
+    )
 
     return () => {
-      sliderContainerRef.current!
-      .removeEventListener('touchstart', preventNavigation)
+      sliderContainerRef.current!.removeEventListener(
+        'touchstart',
+        preventNavigation
+      )
     }
   }, [])
+
+  // renderer -----------
 
   return (
     <div className={s.root} ref={sliderContainerRef}>

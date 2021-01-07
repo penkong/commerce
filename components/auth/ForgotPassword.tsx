@@ -1,19 +1,31 @@
 import { FC, useEffect, useState, useCallback } from 'react'
 import { validate } from 'email-validator'
+
+// -----------------
+
 import { useUI } from '@components/ui/context'
 import { Logo, Button, Input } from '@components/ui'
 
+// -----------------
+
 interface Props {}
 
+// -----------------
+
 const ForgotPassword: FC<Props> = () => {
-  // Form State
+  // state -----------
+
   const [email, setEmail] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState('')
+  const [loading, _] = useState(false)
+  const [message, __] = useState('')
   const [dirty, setDirty] = useState(false)
   const [disabled, setDisabled] = useState(false)
 
+  // context -----------
+
   const { setModalView, closeModal } = useUI()
+
+  // functionalities -----------
 
   const handleResetPassword = async (e: React.SyntheticEvent<EventTarget>) => {
     e.preventDefault()
@@ -31,9 +43,13 @@ const ForgotPassword: FC<Props> = () => {
     }
   }, [email, dirty])
 
+  // lifecycle -----------
+
   useEffect(() => {
     handleValidation()
   }, [handleValidation])
+
+  // renderer -----------
 
   return (
     <form

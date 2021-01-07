@@ -1,17 +1,27 @@
-import cn from 'classnames'
-import dynamic from 'next/dynamic'
 import s from './Layout.module.css'
-import { useRouter } from 'next/router'
+
 import React, { FC } from 'react'
-import { useUI } from '@components/ui/context'
-import { Navbar, Footer } from '@components/common'
+import { useRouter } from 'next/router'
+import dynamic from 'next/dynamic'
+
+import cn from 'classnames'
+
+// -----------------
+
+import type { Page } from '@framework/api/operations/get-all-pages'
+import { CommerceProvider } from '@framework'
+
 import { useAcceptCookies } from '@lib/hooks/useAcceptCookies'
+
 import { Sidebar, Button, Modal, LoadingDots } from '@components/ui'
+import { Navbar, Footer } from '@components/common'
 import { CartSidebarView } from '@components/cart'
 
-import { CommerceProvider } from '@framework'
-import type { Page } from '@framework/api/operations/get-all-pages'
+import { useUI } from '@components/ui/context'
 
+// -----------------
+
+// loading for dynamic imports
 const Loading = () => (
   <div className="w-80 h-80 flex items-center text-center justify-center p-3">
     <LoadingDots />
@@ -39,13 +49,19 @@ const FeatureBar = dynamic(
   dynamicProps
 )
 
+// -----------------
+
 interface Props {
   pageProps: {
     pages?: Page[]
   }
 }
 
+// -----------------
+
 const Layout: FC<Props> = ({ children, pageProps }) => {
+  // context -----------
+
   const {
     displaySidebar,
     displayModal,
@@ -53,8 +69,15 @@ const Layout: FC<Props> = ({ children, pageProps }) => {
     closeModal,
     modalView,
   } = useUI()
-  const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
+
+  // hook -----------
+
   const { locale = 'en-US' } = useRouter()
+
+  // custom
+  const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
+
+  // renderer -----------
 
   return (
     <CommerceProvider locale={locale}>

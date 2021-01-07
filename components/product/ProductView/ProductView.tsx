@@ -1,22 +1,29 @@
-import { FC, useState } from 'react'
-import cn from 'classnames'
-import Image from 'next/image'
-import { NextSeo } from 'next-seo'
-
 import s from './ProductView.module.css'
-import { useUI } from '@components/ui/context'
-import { Swatch, ProductSlider } from '@components/product'
-import { Button, Container, Text } from '@components/ui'
 
-import usePrice from '@framework/use-price'
-import useAddItem from '@framework/cart/use-add-item'
+import { FC, useState } from 'react'
+import { NextSeo } from 'next-seo'
+import Image from 'next/image'
+
+import cn from 'classnames'
+
+// -----------------
+
 import type { ProductNode } from '@framework/api/operations/get-product'
+import useAddItem from '@framework/cart/use-add-item'
+import usePrice from '@framework/use-price'
+
 import {
   getCurrentVariant,
   getProductOptions,
   SelectedOptions,
 } from '../helpers'
+
 import WishlistButton from '@components/wishlist/WishlistButton'
+import { Swatch, ProductSlider } from '@components/product'
+import { Button, Container, Text } from '@components/ui'
+import { useUI } from '@components/ui/context'
+
+// -----------------
 
 interface Props {
   className?: string
@@ -24,22 +31,37 @@ interface Props {
   product: ProductNode
 }
 
+// -----------------
+
 const ProductView: FC<Props> = ({ product }) => {
+  // state -----------
+
+  const [loading, setLoading] = useState(false)
+  const [choices, setChoices] = useState<SelectedOptions>({
+    size: null,
+    color: null,
+  })
+
+  // context -----------
+
+  const { openSidebar } = useUI()
+
+  // helper -----------
+
+  const options = getProductOptions(product)
+  const variant =
+    getCurrentVariant(product, choices) || product.variants.edges?.[0]
+
+  // framework -----------
+
   const addItem = useAddItem()
   const { price } = usePrice({
     amount: product.prices?.price?.value,
     baseAmount: product.prices?.retailPrice?.value,
     currencyCode: product.prices?.price?.currencyCode!,
   })
-  const { openSidebar } = useUI()
-  const options = getProductOptions(product)
-  const [loading, setLoading] = useState(false)
-  const [choices, setChoices] = useState<SelectedOptions>({
-    size: null,
-    color: null,
-  })
-  const variant =
-    getCurrentVariant(product, choices) || product.variants.edges?.[0]
+
+  // functionalities -----------
 
   const addToCart = async () => {
     setLoading(true)
@@ -54,6 +76,8 @@ const ProductView: FC<Props> = ({ product }) => {
       setLoading(false)
     }
   }
+
+  // renderer -----------
 
   return (
     <Container className="max-w-none w-full" clean>

@@ -1,14 +1,23 @@
 import { FC, useEffect, useState, useCallback } from 'react'
 import { validate } from 'email-validator'
+
+// -----------------
+
+import useSignup from '@framework/use-signup'
+
+import { Logo, Button, Input } from '@components/ui'
 import { Info } from '@components/icons'
 import { useUI } from '@components/ui/context'
-import { Logo, Button, Input } from '@components/ui'
-import useSignup from '@framework/use-signup'
+
+// -----------------
 
 interface Props {}
 
+// -----------------
+
 const SignUpView: FC<Props> = () => {
-  // Form State
+  // state -----------
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [firstName, setFirstName] = useState('')
@@ -18,8 +27,15 @@ const SignUpView: FC<Props> = () => {
   const [dirty, setDirty] = useState(false)
   const [disabled, setDisabled] = useState(false)
 
-  const signup = useSignup()
+  // context -----------
+
   const { setModalView, closeModal } = useUI()
+
+  // framework -----------
+
+  const signup = useSignup()
+
+  // functionalities -----------
 
   const handleSignup = async (e: React.SyntheticEvent<EventTarget>) => {
     e.preventDefault()
@@ -56,9 +72,13 @@ const SignUpView: FC<Props> = () => {
     }
   }, [email, password, dirty])
 
+  // lifecycle -----------
+
   useEffect(() => {
     handleValidation()
   }, [handleValidation])
+
+  // renderer -----------
 
   return (
     <form

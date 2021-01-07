@@ -1,22 +1,38 @@
 import { FC, useEffect, useState, useCallback } from 'react'
-import { Logo, Button, Input } from '@components/ui'
-import useLogin from '@framework/use-login'
-import { useUI } from '@components/ui/context'
 import { validate } from 'email-validator'
+
+// -----------------
+
+import useLogin from '@framework/use-login'
+
+import { Logo, Button, Input } from '@components/ui'
+import { useUI } from '@components/ui/context'
+
+// -----------------
 
 interface Props {}
 
+// -----------------
+
 const LoginView: FC<Props> = () => {
-  // Form State
+  // state -----------
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [dirty, setDirty] = useState(false)
   const [disabled, setDisabled] = useState(false)
+
+  // context -----------
+
   const { setModalView, closeModal } = useUI()
 
+  // framework -----------
+
   const login = useLogin()
+
+  // functionalities -----------
 
   const handleLogin = async (e: React.SyntheticEvent<EventTarget>) => {
     e.preventDefault()
@@ -51,9 +67,13 @@ const LoginView: FC<Props> = () => {
     }
   }, [email, password, dirty])
 
+  // lifecycle -----------
+
   useEffect(() => {
     handleValidation()
   }, [handleValidation])
+
+  // renderer -----------
 
   return (
     <form

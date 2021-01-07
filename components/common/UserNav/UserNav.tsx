@@ -1,27 +1,48 @@
+import s from './UserNav.module.css'
+
 import { FC } from 'react'
 import Link from 'next/link'
+
 import cn from 'classnames'
-import useCart from '@framework/cart/use-cart'
+
+// -----------------
+
 import useCustomer from '@framework/use-customer'
+import useCart from '@framework/cart/use-cart'
+
+import DropdownMenu from '@components/common/UserNav/DropdownMenu'
 import { Heart, Bag } from '@components/icons'
 import { useUI } from '@components/ui/context'
-import DropdownMenu from './DropdownMenu'
-import s from './UserNav.module.css'
 import { Avatar } from '@components/common'
+
+// -----------------
 
 interface Props {
   className?: string
 }
 
-const countItem = (count: number, item: any) => count + item.quantity
-const countItems = (count: number, items: any[]) =>
-  items.reduce(countItem, count)
+// -----------------
 
 const UserNav: FC<Props> = ({ className, children, ...props }) => {
+  // framework -----------
+
   const { data } = useCart()
   const { data: customer } = useCustomer()
+
+  // context -----------
+
   const { toggleSidebar, closeSidebarIfPresent, openModal } = useUI()
+
+  // utils -----------
+
+  // what are these???
+  const countItem = (count: number, item: any) => count + item.quantity
+  const countItems = (count: number, items: any[]) =>
+    items.reduce(countItem, count)
+
   const itemsCount = Object.values(data?.line_items ?? {}).reduce(countItems, 0)
+
+  // renderer -----------
 
   return (
     <nav className={cn(s.root, className)}>

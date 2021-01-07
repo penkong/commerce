@@ -1,19 +1,31 @@
-import { FC, useEffect, useMemo } from 'react'
-import cn from 'classnames'
 import s from './Searchbar.module.css'
+
+import { FC, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/router'
+
+import cn from 'classnames'
+
+// -----------------
 
 interface Props {
   className?: string
   id?: string
 }
 
+// -----------------
+
 const Searchbar: FC<Props> = ({ className, id = 'search' }) => {
+  // hook -----------
+
   const router = useRouter()
+
+  // lifecylce -----------
 
   useEffect(() => {
     router.prefetch('/search')
   }, [])
+
+  // renderer -----------
 
   return useMemo(
     () => (

@@ -1,13 +1,11 @@
-import cn from 'classnames'
-import Link from 'next/link'
-import { FC, useRef, useState, useEffect } from 'react'
-import { useTheme } from 'next-themes'
-import { useRouter } from 'next/router'
 import s from './DropdownMenu.module.css'
-import { Avatar } from '@components/common'
-import { Moon, Sun } from '@components/icons'
-import { useUI } from '@components/ui/context'
-import ClickOutside from '@lib/click-outside'
+
+import { FC, useRef, useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
+import { useTheme } from 'next-themes'
+import Link from 'next/link'
+
+import cn from 'classnames'
 
 import {
   disableBodyScroll,
@@ -15,34 +13,47 @@ import {
   clearAllBodyScrollLocks,
 } from 'body-scroll-lock'
 
+// -----------------
+
 import useLogout from '@framework/use-logout'
+
+import ClickOutside from '@lib/click-outside'
+
+import { useUI } from '@components/ui/context'
+import { Moon, Sun } from '@components/icons'
+import { Avatar } from '@components/common'
+
+import { LINKS } from './constant'
+
+// -----------------
 
 interface DropdownMenuProps {
   open?: boolean
 }
 
-const LINKS = [
-  {
-    name: 'My Orders',
-    href: '/orders',
-  },
-  {
-    name: 'My Profile',
-    href: '/profile',
-  },
-  {
-    name: 'My Cart',
-    href: '/cart',
-  },
-]
+// -----------------
 
 const DropdownMenu: FC<DropdownMenuProps> = ({ open = false }) => {
-  const logout = useLogout()
+  // state -----------
+
+  const [display, setDisplay] = useState(false)
+  // ref object
+  const ref = useRef() as React.MutableRefObject<HTMLUListElement>
+
+  // hook -----------
+
   const { pathname } = useRouter()
   const { theme, setTheme } = useTheme()
-  const [display, setDisplay] = useState(false)
+
+  // context -----------
+
   const { closeSidebarIfPresent } = useUI()
-  const ref = useRef() as React.MutableRefObject<HTMLUListElement>
+
+  // framework -----------
+
+  const logout = useLogout()
+
+  // lifecycle -----------
 
   useEffect(() => {
     if (ref.current) {
@@ -56,6 +67,8 @@ const DropdownMenu: FC<DropdownMenuProps> = ({ open = false }) => {
       clearAllBodyScrollLocks()
     }
   }, [display])
+
+  // renderer -----------
 
   return (
     <ClickOutside active={display} onClick={() => setDisplay(false)}>

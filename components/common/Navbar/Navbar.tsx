@@ -1,13 +1,24 @@
+import s from './Navbar.module.css'
+
 import { FC, useState, useEffect } from 'react'
 import Link from 'next/link'
-import s from './Navbar.module.css'
+
+import throttle from 'lodash.throttle'
+import cn from 'classnames'
+
+// -----------------
+
 import { Logo, Container } from '@components/ui'
 import { Searchbar, UserNav } from '@components/common'
-import cn from 'classnames'
-import throttle from 'lodash.throttle'
+
+// -----------------
 
 const Navbar: FC = () => {
+  // state -----------
+
   const [hasScrolled, setHasScrolled] = useState(false)
+
+  // lifecycle -----------
 
   useEffect(() => {
     const handleScroll = throttle(() => {
@@ -22,6 +33,8 @@ const Navbar: FC = () => {
       document.removeEventListener('scroll', handleScroll)
     }
   }, [])
+
+  // renderer -----------
 
   return (
     <div className={cn(s.root, { 'shadow-magical': hasScrolled })}>

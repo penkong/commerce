@@ -1,9 +1,18 @@
-import cn from 'classnames'
-import { FC } from 'react'
 import s from './Swatch.module.css'
-import { Check } from '@components/icons'
-import Button, { ButtonProps } from '@components/ui/Button'
+
+import { FC } from 'react'
+
+import cn from 'classnames'
+
+// -----------------
+
 import { isDark } from '@lib/colors'
+
+import Button, { ButtonProps } from '@components/ui/Button'
+import { Check } from '@components/icons'
+
+// -----------------
+
 interface Props {
   active?: boolean
   children?: any
@@ -13,6 +22,8 @@ interface Props {
   color?: string
 }
 
+// -----------------
+
 const Swatch: FC<Props & ButtonProps> = ({
   className,
   color = '',
@@ -21,6 +32,8 @@ const Swatch: FC<Props & ButtonProps> = ({
   active,
   ...props
 }) => {
+  // Ui things -----------
+
   variant = variant?.toLowerCase()
   label = label?.toLowerCase()
 
@@ -34,6 +47,8 @@ const Swatch: FC<Props & ButtonProps> = ({
     },
     className
   )
+
+  // renderer -----------
 
   return (
     <Button

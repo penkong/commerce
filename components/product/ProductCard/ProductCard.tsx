@@ -1,12 +1,19 @@
-import cn from 'classnames'
-import Link from 'next/link'
-import Image from 'next/image'
-import type { FC } from 'react'
 import s from './ProductCard.module.css'
+
+import type { FC } from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
+
+// -----------------
+
+import cn from 'classnames'
+
+import type { ProductNode } from '@framework/api/operations/get-all-products'
+import usePrice from '@framework/use-price'
+
 import WishlistButton from '@components/wishlist/WishlistButton'
 
-import usePrice from '@framework/use-price'
-import type { ProductNode } from '@framework/api/operations/get-all-products'
+// -----------------
 
 interface Props {
   className?: string
@@ -20,6 +27,8 @@ interface Props {
   imgSizes?: string
 }
 
+// -----------------
+
 const ProductCard: FC<Props> = ({
   className,
   product: p,
@@ -31,12 +40,19 @@ const ProductCard: FC<Props> = ({
   imgSizes,
   imgLayout = 'responsive',
 }) => {
+  // utils -----------
+
   const src = p.images.edges?.[0]?.node?.urlOriginal!
+
+  // framework -----------
+
   const { price } = usePrice({
     amount: p.prices?.price?.value,
     baseAmount: p.prices?.retailPrice?.value,
     currencyCode: p.prices?.price?.currencyCode!,
   })
+
+  // renderer -----------
 
   return (
     <Link href={`/product${p.path}`}>
