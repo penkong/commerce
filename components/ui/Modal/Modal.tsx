@@ -1,12 +1,19 @@
+import s from './Modal.module.css'
+
 import { FC, useRef, useEffect } from 'react'
 import Portal from '@reach/portal'
-import s from './Modal.module.css'
-import { Cross } from '@components/icons'
+
 import {
   disableBodyScroll,
   enableBodyScroll,
   clearAllBodyScrollLocks,
 } from 'body-scroll-lock'
+
+// -----------------
+
+import { Cross } from '@components/icons'
+
+// -----------------
 
 interface Props {
   className?: string
@@ -15,21 +22,23 @@ interface Props {
   onClose: () => void
 }
 
+// -----------------
+
 const Modal: FC<Props> = ({ children, open, onClose }) => {
+  // refObject
+
   const ref = useRef() as React.MutableRefObject<HTMLDivElement>
 
+  // layout -----------
+
   useEffect(() => {
-    if (ref.current) {
-      if (open) {
-        disableBodyScroll(ref.current)
-      } else {
-        enableBodyScroll(ref.current)
-      }
-    }
-    return () => {
-      clearAllBodyScrollLocks()
-    }
+    if (ref.current)
+      open ? disableBodyScroll(ref.current) : enableBodyScroll(ref.current)
+
+    return () => clearAllBodyScrollLocks()
   }, [open])
+
+  // renderer -----------
 
   return (
     <Portal>

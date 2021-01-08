@@ -1,10 +1,16 @@
+import s from './Text.module.css'
+
 import React, {
   FunctionComponent,
   JSXElementConstructor,
   CSSProperties,
+  ComponentType,
+  ReactElement,
 } from 'react'
+
 import cn from 'classnames'
-import s from './Text.module.css'
+
+// -----------------
 
 interface Props {
   variant?: Variant
@@ -14,7 +20,21 @@ interface Props {
   html?: string
 }
 
+// -----------------
+
 type Variant = 'heading' | 'body' | 'pageHeading' | 'sectionHeading'
+
+type MapComponent = {
+  [P in Variant]: ComponentType<any> | string
+}
+
+type Comp =
+  | JSXElementConstructor<any>
+  | ReactElement<any>
+  | ComponentType<any>
+  | string
+
+// -----------------
 
 const Text: FunctionComponent<Props> = ({
   style,
@@ -23,26 +43,24 @@ const Text: FunctionComponent<Props> = ({
   children,
   html,
 }) => {
-  const componentsMap: {
-    [P in Variant]: React.ComponentType<any> | string
-  } = {
+  // utils -----------
+
+  const componentsMap: MapComponent = {
     body: 'div',
     heading: 'h1',
     pageHeading: 'h1',
     sectionHeading: 'h2',
   }
 
-  const Component:
-    | JSXElementConstructor<any>
-    | React.ReactElement<any>
-    | React.ComponentType<any>
-    | string = componentsMap![variant!]
+  const Component: Comp = componentsMap[variant]
 
   const htmlContentProps = html
     ? {
         dangerouslySetInnerHTML: { __html: html },
       }
     : {}
+
+  // rednerer -----------
 
   return (
     <Component

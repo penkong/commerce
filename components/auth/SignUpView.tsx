@@ -6,8 +6,8 @@ import { validate } from 'email-validator'
 import useSignup from '@framework/use-signup'
 
 import { Logo, Button, Input } from '@components/ui'
-import { Info } from '@components/icons'
 import { useUI } from '@components/ui/context'
+import { Info } from '@components/icons'
 
 // -----------------
 

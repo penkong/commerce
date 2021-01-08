@@ -1,7 +1,14 @@
-import React, { CSSProperties } from 'react'
-import cn from 'classnames'
-import px from '@lib/to-pixels'
 import s from './Skeleton.module.css'
+
+import React, { CSSProperties } from 'react'
+
+import cn from 'classnames'
+
+// -----------------
+
+import px from '@lib/to-pixels'
+
+// -----------------
 
 interface Props {
   width?: string | number
@@ -13,6 +20,8 @@ interface Props {
   className?: string
 }
 
+// -----------------
+
 const Skeleton: React.FC<Props> = ({
   style,
   width,
@@ -22,6 +31,8 @@ const Skeleton: React.FC<Props> = ({
   show = true,
   boxHeight = height,
 }) => {
+  // Ui thing -----------
+
   // Automatically calculate the size if there are children
   // and no fixed sizes are specified
   const shouldAutoSize = !!children && !(width || height)
@@ -30,6 +41,8 @@ const Skeleton: React.FC<Props> = ({
   width = width || 24
   height = height || 24
   boxHeight = boxHeight || height
+
+  // renderer -----------
 
   return (
     <span

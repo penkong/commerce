@@ -1,5 +1,8 @@
-import cn from 'classnames'
 import React, { FC } from 'react'
+
+import cn from 'classnames'
+
+// -----------------
 
 interface Props {
   className?: string
@@ -7,6 +10,8 @@ interface Props {
   el?: HTMLElement
   clean?: boolean
 }
+
+// -----------------
 
 const Container: FC<Props> = ({ children, className, el = 'div', clean }) => {
   const rootClassName = cn(className, {

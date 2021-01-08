@@ -1,23 +1,31 @@
-import cn from 'classnames'
 import s from './Input.module.css'
-import React, { InputHTMLAttributes } from 'react'
+
+import React, { ChangeEvent, FC, InputHTMLAttributes } from 'react'
+
+import cn from 'classnames'
+
+// -----------------
 
 export interface Props extends InputHTMLAttributes<HTMLInputElement> {
   className?: string
   onChange?: (...args: any[]) => any
 }
 
-const Input: React.FC<Props> = (props) => {
-  const { className, children, onChange, ...rest } = props
+// -----------------
+
+const Input: FC<Props> = ({ className, children, onChange, ...rest }) => {
+  // Ui thing -----------
 
   const rootClassName = cn(s.root, {}, className)
 
-  const handleOnChange = (e: any) => {
-    if (onChange) {
-      onChange(e.target.value)
-    }
+  // functionalities -----------
+
+  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (onChange) onChange(e.target.value)
     return null
   }
+
+  // renderer -----------
 
   return (
     <label>

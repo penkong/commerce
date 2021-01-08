@@ -1,13 +1,22 @@
-import React, { FC } from 'react'
-import { Container } from '@components/ui'
-import { RightArrow } from '@components/icons'
 import s from './Hero.module.css'
+
+import React, { FC } from 'react'
 import Link from 'next/link'
+
+// -----------------
+
+import { RightArrow } from '@components/icons'
+import { Container } from '@components/ui'
+
+// -----------------
+
 interface Props {
   className?: string
   headline: string
   description: string
 }
+
+// -----------------
 
 const Hero: FC<Props> = ({ headline, description }) => {
   return (

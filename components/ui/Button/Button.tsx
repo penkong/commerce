@@ -1,4 +1,5 @@
-import cn from 'classnames'
+import s from './Button.module.css'
+
 import React, {
   forwardRef,
   ButtonHTMLAttributes,
@@ -6,8 +7,14 @@ import React, {
   useRef,
 } from 'react'
 import mergeRefs from 'react-merge-refs'
-import s from './Button.module.css'
+
+import cn from 'classnames'
+
+// -----------------
+
 import { LoadingDots } from '@components/ui'
+
+// -----------------
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string
@@ -21,7 +28,11 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   disabled?: boolean
 }
 
+// -----------------
+
 const Button: React.FC<ButtonProps> = forwardRef((props, buttonRef) => {
+  // props -----------
+
   const {
     className,
     variant = 'flat',
@@ -34,7 +45,12 @@ const Button: React.FC<ButtonProps> = forwardRef((props, buttonRef) => {
     Component = 'button',
     ...rest
   } = props
+
+  // refObject
+
   const ref = useRef<typeof Component>(null)
+
+  // Ui thing -----------
 
   const rootClassName = cn(
     s.root,
@@ -45,6 +61,8 @@ const Button: React.FC<ButtonProps> = forwardRef((props, buttonRef) => {
     },
     className
   )
+
+  // renderer -----------
 
   return (
     <Component

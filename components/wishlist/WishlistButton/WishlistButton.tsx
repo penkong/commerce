@@ -1,17 +1,26 @@
-import React, { FC, useState } from 'react'
+import React, { ButtonHTMLAttributes, FC, useState } from 'react'
+
 import cn from 'classnames'
+
+// -----------------
+
 import type { ProductNode } from '@framework/api/operations/get-all-products'
-import useAddItem from '@framework/wishlist/use-add-item'
 import useRemoveItem from '@framework/wishlist/use-remove-item'
 import useWishlist from '@framework/wishlist/use-wishlist'
+import useAddItem from '@framework/wishlist/use-add-item'
 import useCustomer from '@framework/use-customer'
+
 import { Heart } from '@components/icons'
 import { useUI } from '@components/ui/context'
+
+// -----------------
 
 type Props = {
   productId: number
   variant: NonNullable<ProductNode['variants']['edges']>[0]
-} & React.ButtonHTMLAttributes<HTMLButtonElement>
+} & ButtonHTMLAttributes<HTMLButtonElement>
+
+// -----------------
 
 const WishlistButton: FC<Props> = ({
   productId,
@@ -19,17 +28,30 @@ const WishlistButton: FC<Props> = ({
   className,
   ...props
 }) => {
+  // state -----------
+
+  const [loading, setLoading] = useState(false)
+
+  // Ui thing -----------
+
+  const { openModal, setModalView } = useUI()
+
+  // framework -----------
+
   const addItem = useAddItem()
   const removeItem = useRemoveItem()
   const { data } = useWishlist()
   const { data: customer } = useCustomer()
-  const [loading, setLoading] = useState(false)
-  const { openModal, setModalView } = useUI()
+
+  // Util -----------
+
   const itemInWishlist = data?.items?.find(
     (item) =>
       item.product_id === productId &&
       item.variant_id === variant?.node.entityId
   )
+
+  // functionanlities -----------
 
   const handleWishlistChange = async (e: any) => {
     e.preventDefault()
@@ -45,14 +67,12 @@ const WishlistButton: FC<Props> = ({
     setLoading(true)
 
     try {
-      if (itemInWishlist) {
-        await removeItem({ id: itemInWishlist.id! })
-      } else {
-        await addItem({
-          productId,
-          variantId: variant?.node.entityId!,
-        })
-      }
+      itemInWishlist
+        ? await removeItem({ id: itemInWishlist.id! })
+        : await addItem({
+            productId,
+            variantId: variant?.node.entityId!,
+          })
 
       setLoading(false)
     } catch (err) {

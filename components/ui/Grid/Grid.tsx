@@ -1,6 +1,9 @@
-import cn from 'classnames'
-import { FC, ReactNode, Component } from 'react'
 import s from './Grid.module.css'
+
+import { FC, ReactNode, Component } from 'react'
+import cn from 'classnames'
+
+// -----------------
 
 interface Props {
   className?: string
@@ -8,6 +11,8 @@ interface Props {
   layout?: 'A' | 'B' | 'C' | 'D' | 'normal'
   variant?: 'default' | 'filled'
 }
+
+// -----------------
 
 const Grid: FC<Props> = ({
   className,

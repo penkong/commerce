@@ -1,14 +1,18 @@
-import React, { FC, useMemo } from 'react'
+import React, {
+  createContext,
+  FC,
+  useContext,
+  useMemo,
+  useReducer,
+} from 'react'
+
 import { ThemeProvider } from 'next-themes'
 
-export interface State {
-  displaySidebar: boolean
-  displayDropdown: boolean
-  displayModal: boolean
-  displayToast: boolean
-  modalView: string
-  toastText: string
-}
+// -----------------
+
+import { Action, MODAL_VIEWS, State } from './context.types'
+
+// -----------------
 
 const initialState = {
   displaySidebar: false,
@@ -19,46 +23,7 @@ const initialState = {
   toastText: '',
 }
 
-type Action =
-  | {
-      type: 'OPEN_SIDEBAR'
-    }
-  | {
-      type: 'CLOSE_SIDEBAR'
-    }
-  | {
-      type: 'OPEN_TOAST'
-    }
-  | {
-      type: 'CLOSE_TOAST'
-    }
-  | {
-      type: 'SET_TOAST_TEXT'
-      text: ToastText
-    }
-  | {
-      type: 'OPEN_DROPDOWN'
-    }
-  | {
-      type: 'CLOSE_DROPDOWN'
-    }
-  | {
-      type: 'OPEN_MODAL'
-    }
-  | {
-      type: 'CLOSE_MODAL'
-    }
-  | {
-      type: 'SET_MODAL_VIEW'
-      view: MODAL_VIEWS
-    }
-
-type MODAL_VIEWS = 'SIGNUP_VIEW' | 'LOGIN_VIEW' | 'FORGOT_VIEW'
-type ToastText = string
-
-export const UIContext = React.createContext<State | any>(initialState)
-
-UIContext.displayName = 'UIContext'
+// -----------------
 
 function uiReducer(state: State, action: Action) {
   switch (action.type) {
@@ -125,15 +90,27 @@ function uiReducer(state: State, action: Action) {
   }
 }
 
+// -----------------
+
+export const UIContext = createContext<State | any>(initialState)
+
+UIContext.displayName = 'UIContext'
+
+// -----------------
+
 export const UIProvider: FC = (props) => {
-  const [state, dispatch] = React.useReducer(uiReducer, initialState)
+  const [state, dispatch] = useReducer(uiReducer, initialState)
+
+  // Actions -----------
 
   const openSidebar = () => dispatch({ type: 'OPEN_SIDEBAR' })
   const closeSidebar = () => dispatch({ type: 'CLOSE_SIDEBAR' })
+
   const toggleSidebar = () =>
     state.displaySidebar
       ? dispatch({ type: 'CLOSE_SIDEBAR' })
       : dispatch({ type: 'OPEN_SIDEBAR' })
+
   const closeSidebarIfPresent = () =>
     state.displaySidebar && dispatch({ type: 'CLOSE_SIDEBAR' })
 
@@ -170,13 +147,18 @@ export const UIProvider: FC = (props) => {
   return <UIContext.Provider value={value} {...props} />
 }
 
+// -----------------
+
 export const useUI = () => {
-  const context = React.useContext(UIContext)
-  if (context === undefined) {
+  const context = useContext(UIContext)
+
+  if (context === undefined)
     throw new Error(`useUI must be used within a UIProvider`)
-  }
+
   return context
 }
+
+// -----------------
 
 export const ManagedUIContext: FC = ({ children }) => (
   <UIProvider>
